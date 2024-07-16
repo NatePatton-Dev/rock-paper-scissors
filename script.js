@@ -1,85 +1,88 @@
 function getComputerChoice() {
-    let computerChoiceNumber = (Math.floor((Math.random()*3))+1)
+    let computerChoiceNumber = (Math.floor((Math.random()*3))+1);
     if (computerChoiceNumber === 1) {
-        return "rock"
+        return "rock";
     } else if (computerChoiceNumber === 2) {
-        return "paper"
+        return "paper";
     } else {
-        return "scissors"
-    } 
-}
+        return "scissors";
+    };
+};
 // return value equal to 'rock', 'paper', or 'scissors' randomly
 
-function getHumanChoice() {
-    let humanChoice = prompt("Type rock, paper, or scissors")
-    if (humanChoice === ("rock" || "paper" || "scissors")) {
-        return humanChoice
-    } else {
-        alert("Incorrect value entered, please only type rock, paper, or scissors. This is case sensitive")
-        return getHumanChoice()
-    }
-}
-// return 'rock, 'paper', or 'scissors' depending on user input
-
-function playGame() {
-    let humanScore = 0
-    let computerScore = 0
-    function playRound (humanChoice, computerChoice) {
-        if (humanChoice.toLowerCase() === "rock") {
-            if (computerChoice === "scissors") {
-                ++humanScore
-                console.log("Rock beats scissors - You win!")
-            } else if (computerChoice === "paper") {
-                ++computerScore
-                console.log("Paper beats rock - You lose!")
-            } else {
-                console.log("You both chose rock - Tie!")
-            }
-        } else if (humanChoice.toLowerCase() === "paper") {
-            if (computerChoice === "rock") {
-                ++humanScore
-                console.log("Paper beats rock - You win!")
-            } else if (computerChoice === "scissors") {
-                ++computerScore
-                console.log("Scissors beats paper - You lose!")
-            } else {
-                console.log("You both chose paper - Tie!")
-            }
+function playRound (humanChoice, computerChoice) {
+    if (humanChoice.toLowerCase() === "rock") {
+        if (computerChoice === "scissors") {
+            ++humanScore;
+            result.textContent = "Rock beats scissors - You win!";
+        } else if (computerChoice === "paper") {
+            ++computerScore;
+            result.textContent = "Paper beats rock - You lose!";
         } else {
-            if (computerChoice === "rock") {
-                ++computerScore
-                console.log("Rock beats scissors - You lose!")
-            } else if (computerChoice === "paper") {
-                ++humanScore
-                console.log("Scissors beats paper - You win!")
-            } else {
-                console.log("You both chose scissors - Tie!")
-            }
-        }
-    }
-    /* play a round of Rock Paper Scissors using the two get functions and incrementing the appropriate score and console.log appropriate response.
-    I know the toLowerCase() is not necessary given the value of getHumanChoice can only be lowercase, but I wanted to show understanding of how to make
-    a function parameter case insensitive, while still ensuring only valid choices come out of getHumanChoice() */
-    let humanSelection = getHumanChoice()
-    let computerSelection = getComputerChoice()
-    playRound(humanSelection, computerSelection)
-    humanSelection = getHumanChoice()
-    computerSelection = getComputerChoice()
-    playRound(humanSelection, computerSelection)
-    humanSelection = getHumanChoice()
-    computerSelection = getComputerChoice()
-    playRound(humanSelection, computerSelection)
-    humanSelection = getHumanChoice()
-    computerSelection = getComputerChoice()
-    playRound(humanSelection, computerSelection)
-    humanSelection = getHumanChoice()
-    computerSelection = getComputerChoice()
-    playRound(humanSelection, computerSelection)
-    if (humanScore > computerScore) {
-        console.log(`You won! ${humanScore} to ${computerScore}`)
+            result.textContent = "You both chose rock - Tie!";
+        };
+    } else if (humanChoice.toLowerCase() === "paper") {
+        if (computerChoice === "rock") {
+            ++humanScore;
+            result.textContent = "Paper beats rock - You win!";
+        } else if (computerChoice === "scissors") {
+            ++computerScore;
+            result.textContent = "Scissors beats paper - You lose!";
+        } else {
+            result.textContent = "You both chose paper - Tie!";
+        };
     } else {
-        console.log(`You lost! ${humanScore} to ${computerScore}`)
-    }
-}
-// play a game of 5 rounds of Rock Paper Scissors and report score and winner
+        if (computerChoice === "rock") {
+            ++computerScore;
+            result.textContent = "Rock beats scissors - You lose!";
+        } else if (computerChoice === "paper") {
+            ++humanScore;
+            result.textContent = "Scissors beats paper - You win!";
+        } else {
+            result.textContent = "You both chose scissors - Tie!";
+        };
+    };
+    if (humanScore === 5 || computerScore === 5) {
+        rock.removeEventListener("click", chooseRock);
+        paper.removeEventListener("click", choosePaper);
+        scissors.removeEventListener("click", chooseScissors);
+        if (humanScore > computerScore) {
+            score.textContent = `You won! ${humanScore} to ${computerScore}`;
+        } else {
+            score.textContent = `You lost! ${humanScore} to ${computerScore}`;
+        };
+    } else {
+        score.textContent = `You: ${humanScore} Computer: ${computerScore}`;
+    };
+};
+// report results of round, report current score, 
+// report winner if there is one, and deactivate buttons after 
+// someone wins a game to 5
 
+let humanScore = 0;
+let computerScore = 0;
+const score = document.querySelector("#score");
+const result = document.querySelector("#result");
+result.textContent = "Click one of the buttons above!";
+score.textContent = `You: ${humanScore} Computer: ${computerScore}`;
+const rock = document.querySelector("#rock");
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+function chooseRock() {
+    let humanSelection = "rock";
+    let computerSelection = getComputerChoice();
+    playRound(humanSelection, computerSelection);
+};
+function choosePaper() {
+    let humanSelection = "paper";
+    let computerSelection = getComputerChoice();
+    playRound(humanSelection, computerSelection);
+};
+function chooseScissors() {
+    let humanSelection = "scissors";
+    let computerSelection = getComputerChoice();
+    playRound(humanSelection, computerSelection);
+};
+rock.addEventListener("click", chooseRock);
+paper.addEventListener("click", choosePaper);
+scissors.addEventListener("click", chooseScissors);
